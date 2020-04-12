@@ -1,0 +1,43 @@
+.ymaps-2-1-76-balloon {
+  @include default-border;
+  overflow: hidden;
+
+  &__content {
+    font-family: "ComfortaaRegular", Arial, Helvetica, sans-serif !important;
+  
+    & > ymaps {
+      height: 100% !important;
+    }
+  }
+}
+
+::-webkit-scrollbar { 
+  width: 5px; height: 3px;
+}
+
+::-webkit-scrollbar-button {
+  height: 15px;
+  background-color: $border-color;
+}
+
+::-webkit-scrollbar-track {
+  background-color: $border-color;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: #ffffff;
+}
+
+::-webkit-scrollbar-thumb {
+  height: 50px;
+  background-color: $border-color;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-corner {
+  background-color: $border-color;
+}
+
+::-webkit-resizer {
+  background-color: $border-color;
+}

@@ -1,0 +1,12 @@
+.menu {
+  @include flex-box;
+  width: 90%;
+  height: 10%;
+  justify-content: center;
+
+  &-btn {
+    @include default-button;
+    align-self: flex-end;
+    height: 50px;
+  }
+}

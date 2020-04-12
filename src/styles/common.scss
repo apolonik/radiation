@@ -1,0 +1,48 @@
+$border-color: #666;
+
+@mixin flex-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@mixin default-border { 
+  border: 5px solid $border-color;
+  border-radius: 15px;
+}
+
+@mixin default-button {
+  border: 1px solid $border-color;
+  border-radius: 15px;
+  cursor: pointer;
+  outline: none;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  @include flex-box;
+  position: relative;
+  height: 100%;
+
+  font-family: "ComfortaaRegular", Arial, Helvetica, sans-serif;
+
+  .map-wrapper {
+    @include default-border;
+    width: 90%;
+    height: 80%;
+    overflow: hidden;
+  }
+
+  .header {
+    height: 10%;
+  }
+}
+
+button {
+  font-family: "ComfortaaRegular", Arial, Helvetica, sans-serif !important;
+}

@@ -1,0 +1,1 @@
+export const DISPATCH_EVENT = 'DISPATCH_EVENT';

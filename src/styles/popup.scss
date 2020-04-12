@@ -1,0 +1,52 @@
+.popup {
+  @include flex-box;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+
+  &__content {
+    @include default-border;
+    width: 95%;
+    height: 90%;
+    padding: 15px;
+    background: #fff;
+    overflow-y: auto;
+    position: relative;
+
+    &-img {
+      display: flex;
+      justify-content: center;
+    }
+
+    &-title {
+      display: flex;
+      justify-content: center;
+    }
+
+    &-text {
+      text-indent: 1.5em;
+    }
+
+    &-close-btn {
+      @include default-button;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      height: 30px;
+    }
+
+    .piechart-wrapper {
+      display: inline-flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
