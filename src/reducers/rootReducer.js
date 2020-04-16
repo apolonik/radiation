@@ -2,6 +2,7 @@ import * as types from '../constants/ActionTypes';
 
 const initialState = {
   event: null,
+  currentYear: 2020,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -10,6 +11,10 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state, event: action.payload,
       };
+    case types.UPDATE_CUR_YEAR:
+      return {
+        ...state, currentYear: action.payload,
+      }
     default:
       return state;
   }

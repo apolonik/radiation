@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Header from './Header';
 import MyMap from './MyMap';
 import Popup from './Popup/Popup';
 import Menu from './Menu';
@@ -6,9 +7,7 @@ import Menu from './Menu';
 export default class App extends Component {
   render = () => (
     <>
-      <div className="header">
-        <h1>Моя удивительная карта</h1>
-      </div>
+      <Header />
       <MyMap />
       <Menu />
       <Popup />

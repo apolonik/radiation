@@ -6,6 +6,12 @@ const dispatchEvent = (payload) => ({
   payload,
 });
 
+const updateCurrentYear = (payload) => ({
+  type: types.UPDATE_CUR_YEAR,
+  payload,
+})
+
 export {
   dispatchEvent,
+  updateCurrentYear,
 };
