@@ -8,7 +8,7 @@ class Menu extends Component {
   };
 
   handleChange = ({currentTarget}) => {
-    this.props.updateCurrentYear(currentTarget.value);
+    this.props.updateCurrentYear(+currentTarget.value);
   };
 
   render() {
@@ -38,8 +38,6 @@ const mapDispatchToProps = {
   updateCurrentYear,
 };
 
-const mapStateToProps = ({currentYear}) => ({
-  currentYear,
-});
+const mapStateToProps = ({currentYear}) => ({currentYear});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);

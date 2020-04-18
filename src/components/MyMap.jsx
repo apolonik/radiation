@@ -1,17 +1,36 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import {YMaps, Map} from 'react-yandex-maps';
 import generatePlacemark from './Placemark.jsx';
 
-export default class MyMap extends Component {
+class MyMap extends Component {
   constructor(props) {
     super(props);
     this.state = {
       placemarks: [],
+      cachedPlacemarks: [],
+      currentYear: null,
     }
   }
 
-  async componentDidMount() {
-    await this.initPlacemarks();
+  componentDidMount() {
+    this.initPlacemarks();
+  }
+
+  componentDidUpdate() {
+    if (this.state.currentYear !== this.props.currentYear) {
+      const filteredPlacemarks = this.state.cachedPlacemarks
+        .filter(placemark => {
+          if (placemark.date) {
+            return +placemark.date.slice(0, 4) <= this.props.currentYear;
+          }
+          return true;
+        });
+      this.setState({
+        currentYear: this.props.currentYear,
+        placemarks: filteredPlacemarks
+      });
+    }
   }
 
   async initPlacemarks() {
@@ -24,16 +43,21 @@ export default class MyMap extends Component {
           Object.keys(json)
             .map((key) => {
               return json[key]
-                .map(({latitude, longitude, title, preview, id}) => ({
+                .map(({latitude, longitude, title, preview, id, date}) => ({
                   coords: [latitude, longitude],
                   title,
                   preview,
                   id,
                   type: key,
+                  display: true,
+                  date,
                 }));
               }).flat();
-        
-        this.setState({placemarks: [...modifiedData]});
+        this.setState({
+          cachedPlacemarks: modifiedData,
+          placemarks: modifiedData,
+          currentYear: this.props.currentYear
+        });
       } else {
         throw new Error('Request was failed');
       }
@@ -58,3 +82,7 @@ export default class MyMap extends Component {
     );
   }
 }
+
+const mapStateToProps = ({currentYear}) => ({currentYear});
+
+export default connect(mapStateToProps)(MyMap);

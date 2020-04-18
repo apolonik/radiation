@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const cors = require('cors');
 const utils = require('./utils');
+const fs = require('fs');
 
 const pool = mysql.createPool({
   host: process.env.host,
@@ -30,8 +31,24 @@ app.listen(3001, () =>
   console.log('Express server is running on localhost:3001')
 );
 
+// `INSERT INTO users(name, age) VALUES ?`
+fs.readFile('./server/data.json', (err, data) => {
+  if (err) throw err;
+  const rawData = JSON.parse(data);
+  rawData.map((item) => {
+    item.description = null
+  });
+  rawData.forEach((item) => {
+    const expression = `INSERT INTO ${DB_TABLES.CATASTROPHES} (id, title) VALUES ?`
+    pool.query(expression, [item], function(err, data) {
+      if(err) return console.log(err);
+      console.log(data);
+    });
+  });
+});
+
 app.get('/api/init', async (req, res) => {
-  const cols = 'id, title, latitude, longitude, preview';
+  const cols = 'id, title, latitude, longitude, preview, date';
   const expression 
     = utils.generateExpression(cols, DB_TABLES.POLYGONS);
 
