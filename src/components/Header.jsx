@@ -5,7 +5,7 @@ class Header extends Component {
   render() {
     return (
       <div className="header">
-        <h1>Карта техногенных катастроф с 1947 по {this.props.currentYear}</h1>
+        <h1>Карта техногенных катастроф с 1947 по {this.props.currentYear} год</h1>
       </div>
     );
   }
