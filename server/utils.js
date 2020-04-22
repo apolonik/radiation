@@ -9,5 +9,5 @@ const parseDescription = (data) => {
   return data;
 };
 
-exports.parseDescription = parseDescription;
-exports.generateExpression = generateExpression;
+module.exports.parseDescription = parseDescription;
+module.exports.generateExpression = generateExpression;
