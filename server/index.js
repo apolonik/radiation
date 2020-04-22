@@ -1,65 +1,49 @@
 const {app} = require('./server');
-const {pool} = require('./pool');
-const utils = require('./utils');
+const {promisifyQuery} = require('./pool');
 
 const DB_TABLES = {
   POLYGONS: 'polygons',
   CATASTROPHES: 'catastrophes',
 };
 
+const generateExpression = (cols, type, extraCondition = '') => {
+  return `SELECT ${cols} FROM radiation_db.${type} ${extraCondition}`;
+};
+
 app.get('/api/init', async (req, res) => {
-  const cols = 'id, title, latitude, longitude, preview, date';
-  const expression 
-    = utils.generateExpression(cols, DB_TABLES.POLYGONS);
+  try {
+    const cols = 'id, title, latitude, longitude, preview, date, type';
 
-  pool.query(expression, (err, polygons) => {
-    if (err) {
-      return res.send(err);
-    }
+    let expression = generateExpression(cols, DB_TABLES.POLYGONS);
+    const polygons = await promisifyQuery(expression);
 
-    const expression 
-      = utils.generateExpression(cols, DB_TABLES.CATASTROPHES);
+    expression = generateExpression(cols, DB_TABLES.CATASTROPHES);
+    const catastrophes = await promisifyQuery(expression);
 
-    return pool.query(expression, (err, catastrophes) => {
-      if (err) {
-        return res.send(err);
-      }
-
-      const results = [
-        ...catastrophes.map(catastrophe => ({...catastrophe, type: 'catastrophe'})),
-        ...polygons.map(polygon => ({...polygon, type: 'polygon'}))
-      ];
-      
-      return res.send(results);
-    });
-  });
+    res.send([...catastrophes, ...polygons]);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
-app.post('/api/query', (req, res) => {
+app.post('/api/query', async (req, res) => {
   if(!req.body) {
     return res.sendStatus(400);
   }
-
-  let cols, expression;
-  if (req.body.id) {
-    cols = 'description, title, preview';
-    expression 
-      = utils.generateExpression(cols, `${req.body.type}s`, `where id=${req.body.id}`);
-  } else {
-    cols = 'name, count';
-    expression 
-      = utils.generateExpression(cols, req.body.type);
+  try {
+    if (req.body.id) {
+      const cols = 'description, title, preview';
+      const expression = generateExpression(cols, `${req.body.type}s`, `where id=${req.body.id}`);
+      const [data] = await promisifyQuery(expression);
+      data.description = JSON.parse(data.description);
+      res.send(data);
+    } else {
+      const cols = 'name, count';
+      const expression = generateExpression(cols, req.body.type);
+      const data = await promisifyQuery(expression);
+      res.send(data);
+    }
+  } catch (error) {
+    res.send(error);
   }
-
-  pool.query(expression, (err, results) => {
-    if (err) {
-      return res.send(err);
-    }
-
-    if (results[0].description) {
-      results.map(item => utils.parseDescription(item));
-    }
-
-    return res.send(results);
-  });
 });

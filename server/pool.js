@@ -7,4 +7,15 @@ const pool = mysql.createPool({
   database: process.env.database
 });
 
-module.exports.pool = pool;
+const promisifyQuery = (expression) => {
+  return new Promise((resolve, reject) => {
+    pool.query(expression, (err, results) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(results);
+    });
+  });
+};
+
+module.exports.promisifyQuery = promisifyQuery;

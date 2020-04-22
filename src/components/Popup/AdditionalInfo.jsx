@@ -15,8 +15,8 @@ export default class PopupContent extends Component {
 
   async componentDidMount() {
     try {
-      const [data] = await getAdditionalData({id: this.state.id, type: this.state.type});
-      setTimeout(() => this.setState({content: data}), 1000);
+      const content = await getAdditionalData({id: this.state.id, type: this.state.type});
+      setTimeout(() => this.setState({content}), 1000);
     } catch (e) {
       console.warn(e);
     }
