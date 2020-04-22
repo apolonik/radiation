@@ -42,6 +42,9 @@ export default class PopupContent extends Component {
           </div>
         );
       }
+      case 'h2': {
+        return (<h2 className="popup__content-header" key={uniqid()}>{elem.content}</h2>);
+      }
       default: {
         return (<div key={uniqid()}>Ошибка</div>)
       }

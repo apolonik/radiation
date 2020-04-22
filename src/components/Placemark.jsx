@@ -5,13 +5,13 @@ import generateBalloonTemplate from '../utils/generate-balloon-template';
 
 
 const icons = {
-  polygons: 'islands#blackCircleDotIcon',
-  catastrophes: 'islands#redCircleDotIcon',
+  polygon: 'islands#blackCircleDotIcon',
+  catastrophe: 'islands#redCircleDotIcon',
 };
 
-const generatePlacemark = ({coords, title, preview, id, type}) => {
+const generatePlacemark = ({latitude, longitude, title, preview, id, type}) => {
   const props = {
-    geometry: coords,
+    geometry: [latitude, longitude],
     properties: {
       hintContent: title,
       balloonContent: generateBalloonTemplate(preview, id, type),

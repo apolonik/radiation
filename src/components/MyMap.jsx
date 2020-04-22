@@ -38,24 +38,10 @@ class MyMap extends Component {
       const response = await fetch('/api/init');
       if (response.ok) {
         const json = await response.json();
-        //TODO Should make it more clear and simplify
-        const modifiedData = 
-          Object.keys(json)
-            .map((key) => {
-              return json[key]
-                .map(({latitude, longitude, title, preview, id, date}) => ({
-                  coords: [latitude, longitude],
-                  title,
-                  preview,
-                  id,
-                  type: key,
-                  display: true,
-                  date,
-                }));
-              }).flat();
+
         this.setState({
-          cachedPlacemarks: modifiedData,
-          placemarks: modifiedData,
+          cachedPlacemarks: json,
+          placemarks: json,
           currentYear: this.props.currentYear
         });
       } else {

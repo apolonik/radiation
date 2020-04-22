@@ -13,11 +13,11 @@ class Popup extends Component {
   }
 
   componentDidMount() {
-    window.getpolygons = (id) => {
-      this.setState({id, type: 'polygons'});
+    window.getpolygon = (id) => {
+      this.setState({id, type: 'polygon'});
     }
-    window.getcatastrophes = (id) => {
-      this.setState({id, type: 'catastrophes'});
+    window.getcatastrophe = (id) => {
+      this.setState({id, type: 'catastrophe'});
     }
   }
 
