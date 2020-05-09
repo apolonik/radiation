@@ -14,8 +14,8 @@ const generateBalloonTemplate = (content, id, type) => {
 };
 
 const types = {
-  polygons: 'Ядерный полигон',
-  catastrophes: 'Техногенная катастрофа',
+  polygon: 'Ядерный полигон',
+  catastrophe: 'Техногенная катастрофа',
 };
 
 export default generateBalloonTemplate;

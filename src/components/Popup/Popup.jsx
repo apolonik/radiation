@@ -32,7 +32,7 @@ class Popup extends Component {
   render() {
     const {id} = this.state;
     const type = this.state.type || this.props.type;
-    if (id || type) {
+    if (type) {
       return (
         <div className="popup">
           <div className="popup__content">

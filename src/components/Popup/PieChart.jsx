@@ -25,7 +25,7 @@ export default class PieChart extends Component {
         labels: data.map(item => item.name),
       },
     };
-    const total = data.reduce((sum, item) => item.count + sum, 0)
+    const total = data.reduce((sum, item) => item.count + sum, 0);
     setTimeout(() => this.setState({content, total}), 1000);
   }
 

@@ -3,7 +3,7 @@ import Spinner from '../Spinner';
 import {getAdditionalData} from '../../utils/request-utils';
 import uniqid from 'uniqid';
 
-export default class PopupContent extends Component {
+export default class AdditionalInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,7 +46,7 @@ export default class PopupContent extends Component {
         return (<h2 className="popup__content-header" key={uniqid()}>{elem.content}</h2>);
       }
       default: {
-        return (<div key={uniqid()}>Ошибка</div>)
+        return (<div key={uniqid()}>Ошибка</div>);
       }
     }
   }

@@ -19,6 +19,10 @@
     position: relative;
 
     &-img {
+      @include default-border;
+      width: fit-content;
+      overflow: hidden;
+      margin: 20px auto;
       display: flex;
       justify-content: center;
     }
