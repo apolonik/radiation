@@ -1,20 +1,20 @@
-import * as types from '../constants/ActionTypes';
+import {TYPES} from '../constants/constants';
 
 const initialState = {
-  event: null,
-  currentYear: 2020,
+  data: null,
+  requestType: null,
 };
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case types.DISPATCH_EVENT:
+    case TYPES.DISPATCH_DATA:
       return {
-        ...state, event: action.payload,
+        ...state, data: action.payload,
       };
-    case types.UPDATE_CUR_YEAR:
+    case TYPES.DISPATCH_REQUEST_TYPE:
       return {
-        ...state, currentYear: action.payload,
-      }
+        ...state, requestType: action.payload,
+        };
     default:
       return state;
   }

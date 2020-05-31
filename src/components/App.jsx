@@ -1,15 +1,13 @@
 import React, {Component} from 'react';
-import Header from './Header';
 import MyMap from './MyMap';
 import Popup from './Popup/Popup';
-import Menu from './Menu';
+import ControlPanel from './ControlPanel';
 
 export default class App extends Component {
   render = () => (
     <>
-      <Header />
-      <MyMap />
-      <Menu />
+      <MyMap  />
+      <ControlPanel />
       <Popup />
     </>
   );

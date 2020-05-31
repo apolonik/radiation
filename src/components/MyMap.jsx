@@ -1,58 +1,43 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {dispatchData} from '../actions/storeActions';
 import {YMaps, Map} from 'react-yandex-maps';
-import generatePlacemark from './Placemark.jsx';
+import Placemark from './Placemark/Placemark.jsx';
+import {getAdditionalData} from '../utils/request-utils';
 
 class MyMap extends Component {
   constructor(props) {
     super(props);
     this.state = {
       placemarks: [],
-      cachedPlacemarks: [],
-      currentYear: null,
+      type: null,
+    };
+  };
+
+  handlePlacemarkClick = (payload) => {
+    this.props.dispatchData(payload);
+  };
+
+  componentDidUpdate(prevProps) {
+    if (this.props.requestType !== prevProps.requestType) {
+      this.fetchData(this.props.requestType);
     }
-  }
+  };
 
-  componentDidMount() {
-    this.initPlacemarks();
-  }
-
-  componentDidUpdate() {
-    if (this.state.currentYear !== this.props.currentYear) {
-      const filteredPlacemarks = this.state.cachedPlacemarks
-        .filter(placemark => {
-          if (placemark.date) {
-            return +placemark.date.slice(0, 4) <= this.props.currentYear;
-          }
-          return true;
-        });
-      this.setState({
-        currentYear: this.props.currentYear,
-        placemarks: filteredPlacemarks
-      });
-    }
-  }
-
-  async initPlacemarks() {
+  async fetchData(type) {
     try {
-      const response = await fetch('/api/init');
-      if (response.ok) {
-        const json = await response.json();
-
-        this.setState({
-          cachedPlacemarks: json,
-          placemarks: json,
-          currentYear: this.props.currentYear
-        });
-      } else {
-        throw new Error('Request was failed');
-      }
+      const data = await getAdditionalData({type});
+      this.setState({
+        placemarks: data,
+        type,
+      });
     } catch (e) {
       console.warn(e);
     }
-  }
+  };
 
   render() {
+    const isShown = this.state.type === this.props.requestType;
     return (  
       <div className="map-wrapper">
         <YMaps>
@@ -61,7 +46,13 @@ class MyMap extends Component {
             width={"100%"}
             height={"100%"}
           >
-            {this.state.placemarks.map(item => generatePlacemark(item))}
+            {isShown && this.state.placemarks.map(data => 
+              Placemark({
+                data,
+                type: this.props.requestType,
+                handlePlacemarkClick: this.handlePlacemarkClick,
+              })
+            )}
           </Map>
         </YMaps>
       </div>
@@ -69,6 +60,10 @@ class MyMap extends Component {
   }
 }
 
-const mapStateToProps = ({currentYear}) => ({currentYear});
+const mapDispatchToProps = {
+  dispatchData,
+};
 
-export default connect(mapStateToProps)(MyMap);
+const mapStateToProps = ({requestType}) => ({requestType});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyMap);

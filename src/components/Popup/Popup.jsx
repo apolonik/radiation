@@ -1,60 +1,84 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {dispatchData} from '../../actions/storeActions';
+import {getAdditionalData} from '../../utils/request-utils';
 import PopupContent from './PopupContent';
-import {dispatchEvent} from '../../actions/StoreActions';
 
 class Popup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: null,
-      type: null,
+      data: null,
     };
-  }
-
-  componentDidMount() {
-    window.getpolygon = (id) => {
-      this.setState({id, type: 'polygon'});
-    }
-    window.getcatastrophe = (id) => {
-      this.setState({id, type: 'catastrophe'});
-    }
-  }
+  };
 
   closePopup = () => {
-    this.props.dispatchEvent(null);
     this.setState({
-      id: null,
-      type: null,
+      data: null,
     });
-  }
+    this.props.dispatchData(null);
+  };
+
+  async componentDidUpdate(prevProps, prevState, prevContext) {
+    if (!this.state.data && this.props.title) {
+      switch (this.props.type) {
+        case ('npp'):
+          const data = await getAdditionalData({
+            title: this.props.title,
+            type: 'reactors',
+          });
+          const [{link}] = await getAdditionalData({
+            title: this.props.title,   
+            type: 'link',
+          });
+          data[0].link = link;
+          this.setState({data});
+          break;
+        case ('nf'):
+          const nfData = await getAdditionalData({
+            type: 'nf',
+          });
+          const nfaData = await getAdditionalData({
+            country: this.props.title,
+            type: 'nfa',
+          });
+          const filteredNfData = nfData.filter((item) => item.country === this.props.title);
+          this.setState({
+            data: {
+              nfaData,
+              nfData: filteredNfData,
+            }
+          });
+          break;
+        default:
+          return null;
+      }
+    };
+  };
 
   render() {
-    const {id} = this.state;
-    const type = this.state.type || this.props.type;
-    if (type) {
-      return (
-        <div className="popup">
-          <div className="popup__content">
-            <button 
-              className="popup__content-close-btn"
-              onClick={this.closePopup}>
-                ЗАКРЫТЬ
-            </button>
-            <PopupContent id={id} type={type} />
-          </div>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  }
+    return (
+      <>
+        {this.state.data && 
+          <div className="popup">
+            <div className="popup__content">
+              <button 
+                className="popup__content-close-btn"
+                onClick={this.closePopup}>
+                  ЗАКРЫТЬ
+              </button>
+              <PopupContent data={this.state.data} type={this.props.type}/>
+            </div>
+        </div>}
+      </>
+    );
+  };
 }
 
-const mapStateToProps = state => ({type: state.event});
+const mapStateToProps = ({data}) => ({title: data?.title, type: data?.type});
 
 const mapDispatchToProps = {
-  dispatchEvent,
+  dispatchData,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Popup);

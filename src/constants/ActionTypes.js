@@ -1,2 +1,0 @@
-export const DISPATCH_EVENT = 'DISPATCH_EVENT';
-export const UPDATE_CUR_YEAR = 'UPDATE_CUR_YEAR';

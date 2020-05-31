@@ -1,5 +1,11 @@
+const MEMO = {};
+
 const getAdditionalData = async (requestedData) => {
   try {
+    const body = JSON.stringify(requestedData);
+    if (MEMO[body]) {
+      return MEMO[body];
+    };
     const response = await fetch(
       '/api/query',
       {
@@ -7,12 +13,12 @@ const getAdditionalData = async (requestedData) => {
         headers: {
           'Content-Type': 'application/json;charset=utf-8',
       },
-      body: JSON.stringify(requestedData),
+      body,
     });
 
     if (response.ok) {
       const json = await response.json();
-
+      MEMO[body] = json;
       return json;
     } else {
       return Promise.reject({
