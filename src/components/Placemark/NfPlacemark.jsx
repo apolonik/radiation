@@ -1,7 +1,6 @@
 import React from 'react';
 import {Placemark} from 'react-yandex-maps';
 import uniqid from 'uniqid';
-import {COLORS} from '../../constants/constants';
 import {parser} from '../../utils/parse-string';
 
 const NfPlacemark = ({
@@ -16,7 +15,7 @@ const NfPlacemark = ({
   const handleClick = () => {
     handlePlacemarkClick({title: country, type: 'nf'});
   };
-  const colorsArr = COLORS.slice();
+
   const generateHintContent = () => {
     const str = parser(data.reduce(
       (str, item) => {
@@ -24,20 +23,29 @@ const NfPlacemark = ({
       }, ''));    
     return `<h3>${country}</h3> ${str}`;
   }
-  const fuel = data.map((item) => ({weight: item.accumulated, color: colorsArr.pop()})).filter(item => item.weight);
-  if (!fuel.length) {
-    return null;
-  };
+  const accumulatedFuel = data.reduce((s, item) => {
+    s += item.accumulated || 0;
+    s += item.declined || 0;
+    s += item.resumption || 0;
+    return s;
+  }, 0);
+  const futureFormation = data.reduce((s, item) => {
+    s += item.future_formation || 0;
+    s += item.year_formation || 0;
+    return s;
+  }, 0);
   const props = {
     geometry: [lat, lon],
     properties: {
       hintContent: generateHintContent(),
-      data: fuel,
+      data: [
+        {weight: accumulatedFuel, color: '#FF0000'},
+        {weight: futureFormation, color: '#FBFF00'}],
     },
     options: {
       iconLayout: 'default#pieChart',
-      iconPieChartRadius: 50,
-      iconPieChartCoreRadius: 25,
+      iconPieChartRadius: 35,
+      iconPieChartCoreRadius: 30,
     },
     modules: ['geoObject.addon.hint', 'layout.PieChart'],
   };

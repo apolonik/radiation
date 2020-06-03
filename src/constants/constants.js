@@ -35,18 +35,4 @@ const NF_TEXT = {
   oyat: 'Отработавшее ядерное топливо',
 };
 
-
-const COLORS = [
-  '#222222',
-  '#00FF70',
-  '#000000',
-  '#cccccc',
-  '#FF0078',
-  '#FFF300',
-  '#F700FF',
-  '#00FF70',
-  '#0036FF',
-  '#FF0000',
-];
-
-export {NPP_ICONS, TYPES, NF_TEXT, COLORS, AREA_STATE};
+export {NPP_ICONS, TYPES, NF_TEXT, AREA_STATE};
